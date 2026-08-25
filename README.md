@@ -1,1050 +1,530 @@
-\# Box Office Analytics
+Got you. No emojis. Paste this entire block into `README.md` in Notepad.
 
-
+````markdown
+# Box Office Analytics
 
 A full-stack Indian cinema box office analytics platform built to explore movie performance, lifetime collections, rankings, and yearly box office trends.
 
-
-
 The project combines a Databricks data platform, FastAPI backend, and Next.js analytics frontend into an end-to-end application.
 
-
-
-\## Live Project
-
-
+## Live Project
 
 Frontend:
-
-PASTE\_YOUR\_VERCEL\_URL\_HERE
-
-
+PASTE_YOUR_VERCEL_URL_HERE
 
 Backend API:
-
 https://box-office-analytics.onrender.com
 
-
-
-\## Overview
-
-
+## Overview
 
 Box Office Analytics provides an interactive way to explore Indian movie box office data from 1950 to 2023.
 
-
-
 Users can:
 
+- Search for movies
+- View individual movie performance
+- Compare opening-day collections
+- Compare opening-weekend collections
+- Explore lifetime gross rankings
+- Analyze yearly box office trends
+- View yearly movie production statistics
+- Explore collection trends through interactive charts
 
-
-\- Search for movies
-
-\- View individual movie performance
-
-\- Compare opening-day collections
-
-\- Compare opening-weekend collections
-
-\- Explore lifetime gross rankings
-
-\- Analyze yearly box office trends
-
-\- View yearly movie production statistics
-
-\- Explore collection trends through interactive charts
-
-
-
-\## Architecture
-
-
+## Architecture
 
 ```text
-
-&#x20;                        GitHub
-
-&#x20;                           |
-
-&#x20;             +-------------+-------------+
-
-&#x20;             |                           |
-
-&#x20;             v                           v
-
-&#x20;          Vercel                      Render
-
-&#x20;      Next.js Frontend             FastAPI Backend
-
-&#x20;             |                           |
-
-&#x20;             |       HTTP API            |
-
-&#x20;             +-------------------------->|
-
-&#x20;                                         |
-
-&#x20;                                         | SQL
-
-&#x20;                                         v
-
-&#x20;                                   Databricks
-
-&#x20;                                  SQL Warehouse
-
+                         GitHub
+                            |
+              +-------------+-------------+
+              |                           |
+              v                           v
+           Vercel                      Render
+       Next.js Frontend             FastAPI Backend
+              |                           |
+              |       HTTP API            |
+              +-------------------------->|
+                                          |
+                                          | SQL
+                                          v
+                                    Databricks
+                                   SQL Warehouse
 ````
 
+## Tech Stack
 
+### Data Engineering
 
-\## Tech Stack
+* Databricks
+* Databricks SQL Warehouse
+* SQL
+* Medallion Architecture
+* Bronze Layer
+* Silver Layer
+* Gold Layer
 
+### Backend
 
+* Python
+* FastAPI
+* Databricks SQL Connector
+* Uvicorn
 
-\### Data Engineering
+### Frontend
 
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* Recharts
 
+### Deployment
 
-\* Databricks
+* GitHub
+* Vercel
+* Render
+* Databricks
 
-\* Databricks SQL Warehouse
+## Features
 
-\* SQL
-
-\* Medallion Architecture
-
-\* Bronze Layer
-
-\* Silver Layer
-
-\* Gold Layer
-
-
-
-\### Backend
-
-
-
-\* Python
-
-\* FastAPI
-
-\* Databricks SQL Connector
-
-\* Uvicorn
-
-
-
-\### Frontend
-
-
-
-\* Next.js
-
-\* React
-
-\* TypeScript
-
-\* Tailwind CSS
-
-\* Recharts
-
-
-
-\### Deployment
-
-
-
-\* GitHub
-
-\* Vercel
-
-\* Render
-
-\* Databricks
-
-
-
-\## Features
-
-
-
-\### Home
-
-
+### Home
 
 The homepage provides:
 
+* Movie search
+* Top lifetime grossers
+* Lifetime collection rankings
+* Direct navigation to movie details
 
-
-\* Movie search
-
-\* Top lifetime grossers
-
-\* Lifetime collection rankings
-
-\* Direct navigation to movie details
-
-
-
-\### Rankings
-
-
+### Rankings
 
 The rankings dashboard provides:
 
-
-
-\* Lifetime rankings
-
-\* Opening Day rankings
-
-\* Opening Weekend rankings
-
-
+* Lifetime rankings
+* Opening Day rankings
+* Opening Weekend rankings
 
 Each ranking is retrieved through the FastAPI backend and connected to the Databricks data layer.
 
-
-
-\### Yearly Analytics
-
-
+### Yearly Analytics
 
 The yearly analytics dashboard provides:
 
+* Total movies released by year
+* Total lifetime collection by year
+* Average lifetime collection
+* Highest lifetime collection
+* Interactive lifetime collection trend chart
+* Movies-per-year chart
+* Yearly data table
 
-
-\* Total movies released by year
-
-\* Total lifetime collection by year
-
-\* Average lifetime collection
-
-\* Highest lifetime collection
-
-\* Interactive lifetime collection trend chart
-
-\* Movies-per-year chart
-
-\* Yearly data table
-
-
-
-\### Movie Details
-
-
+### Movie Details
 
 Individual movie pages provide:
 
-
-
-\* Movie title
-
-\* Release date
-
-\* Movie poster
-
-\* Opening Day collection
-
-\* Opening Weekend collection
-
-\* Week 1 collection
-
-\* Lifetime collection
-
-\* Box office performance visualization
-
-\* Lifetime-to-opening-day multiple
-
-
+* Movie title
+* Release date
+* Movie poster
+* Opening Day collection
+* Opening Weekend collection
+* Week 1 collection
+* Lifetime collection
+* Box office performance visualization
+* Lifetime-to-opening-day multiple
 
 Movie posters are retrieved dynamically through Wikipedia's public API when available.
 
-
-
-\## Backend API
-
-
+## Backend API
 
 The FastAPI backend exposes REST endpoints for the frontend.
 
-
-
-\### Health Check
-
-
+### Health Check
 
 ```text
-
 GET /
-
 ```
-
-
 
 Response:
 
-
-
 ```json
-
 {
-
-&#x20; "message": "Box Office API is running"
-
+  "message": "Box Office API is running"
 }
-
 ```
 
-
-
-\### Top Lifetime Movies
-
-
+### Top Lifetime Movies
 
 ```text
-
 GET /api/movies/top-lifetime
-
 ```
 
-
-
-\### Movie Search
-
-
+### Movie Search
 
 ```text
-
-GET /api/movies/search?name=movie\_name
-
+GET /api/movies/search?name=movie_name
 ```
 
-
-
-\### Movie Details
-
-
+### Movie Details
 
 ```text
-
-GET /api/movies/{movie\_id}
-
+GET /api/movies/{movie_id}
 ```
 
-
-
-\### Lifetime Rankings
-
-
+### Lifetime Rankings
 
 ```text
-
 GET /api/rankings/lifetime
-
 ```
 
-
-
-\### Opening Day Rankings
-
-
+### Opening Day Rankings
 
 ```text
-
 GET /api/rankings/opening-day
-
 ```
 
-
-
-\### Opening Weekend Rankings
-
-
+### Opening Weekend Rankings
 
 ```text
-
 GET /api/rankings/opening-weekend
-
 ```
 
-
-
-\### Yearly Analytics
-
-
+### Yearly Analytics
 
 ```text
-
 GET /api/years
-
 ```
 
-
-
-\## Data Architecture
-
-
+## Data Architecture
 
 The project uses a layered data architecture in Databricks.
 
-
-
 ```text
-
 Raw Data
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 +-------------+
-
 |   Bronze    |
-
 | Raw Data    |
-
 +-------------+
-
-&#x20;      |
-
-&#x20;      v
-
+       |
+       v
 +-------------+
-
 |   Silver    |
-
 | Cleaned and |
-
 | Transformed |
-
 | Data        |
-
 +-------------+
-
-&#x20;      |
-
-&#x20;      v
-
+       |
+       v
 +-------------+
-
 |    Gold     |
-
 | Analytics   |
-
 | Ready Data  |
-
 +-------------+
-
-&#x20;      |
-
-&#x20;      v
-
-&#x20;   FastAPI
-
-&#x20;      |
-
-&#x20;      v
-
-&#x20;   Next.js
-
+       |
+       v
+    FastAPI
+       |
+       v
+    Next.js
 ```
-
-
 
 The Gold layer contains analytics-oriented datasets used by the application, including movie performance, rankings, and yearly performance data.
 
+## Environment Variables
 
-
-\## Environment Variables
-
-
-
-\### Backend
-
-
+### Backend
 
 The backend requires:
 
-
-
 ```env
-
-DATABRICKS\_SERVER\_HOSTNAME=your\_hostname
-
-DATABRICKS\_HTTP\_PATH=your\_http\_path
-
-DATABRICKS\_TOKEN=your\_token
-
+DATABRICKS_SERVER_HOSTNAME=your_hostname
+DATABRICKS_HTTP_PATH=your_http_path
+DATABRICKS_TOKEN=your_token
 ```
-
-
 
 These values must never be committed to GitHub.
 
-
-
-\### Frontend
-
-
+### Frontend
 
 For local development:
 
-
-
 ```env
-
-NEXT\_PUBLIC\_API\_URL=http://127.0.0.1:8000
-
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 ```
-
-
 
 For production:
 
-
-
 ```env
-
-NEXT\_PUBLIC\_API\_URL=https://box-office-analytics.onrender.com
-
+NEXT_PUBLIC_API_URL=https://box-office-analytics.onrender.com
 ```
 
+## Local Development
 
-
-\## Local Development
-
-
-
-\### Clone the Repository
-
-
+### Clone the Repository
 
 ```bash
-
 git clone https://github.com/OkayHarshh/box-office-analytics.git
-
 cd box-office-analytics
-
 ```
 
-
-
-\### Backend
-
-
+### Backend
 
 Navigate to the backend:
 
-
-
 ```bash
-
 cd Backend
-
 ```
-
-
 
 Create a virtual environment:
 
-
-
 ```bash
-
 python -m venv venv
-
 ```
-
-
 
 Activate it on Windows:
 
-
-
 ```bash
-
-venv\\Scripts\\activate
-
+venv\Scripts\activate
 ```
-
-
 
 Install dependencies:
 
-
-
 ```bash
-
 pip install -r requirements.txt
-
 ```
-
-
 
 Configure the required Databricks environment variables.
 
-
-
 Start FastAPI:
 
-
-
 ```bash
-
 uvicorn main:app --reload --port 8000
-
 ```
-
-
 
 Backend:
 
-
-
 ```text
-
 http://127.0.0.1:8000
-
 ```
 
-
-
-\### Frontend
-
-
+### Frontend
 
 Open another terminal and navigate to:
 
-
-
 ```bash
-
 cd Frontend
-
 ```
-
-
 
 Install dependencies:
 
-
-
 ```bash
-
 npm install
-
 ```
-
-
 
 Create a `.env.local` file:
 
-
-
 ```env
-
-NEXT\_PUBLIC\_API\_URL=http://127.0.0.1:8000
-
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 ```
-
-
 
 Start Next.js:
 
-
-
 ```bash
-
 npm run dev
-
 ```
-
-
 
 Frontend:
 
-
-
 ```text
-
 http://localhost:3000
-
 ```
 
-
-
-\## Production Build
-
-
+## Production Build
 
 To create a production build:
 
-
-
 ```bash
-
 npm run build
-
 ```
-
-
 
 The application includes the following routes:
 
-
-
 ```text
-
 /
-
-&#x20;/movies/\[movie\_id]
-
-&#x20;/rankings
-
-&#x20;/years
-
+ /movies/[movie_id]
+ /rankings
+ /years
 ```
 
+## Deployment
 
-
-\## Deployment
-
-
-
-\### Frontend
-
-
+### Frontend
 
 The Next.js frontend is deployed using Vercel.
 
+The production frontend communicates with the FastAPI backend through the `NEXT_PUBLIC_API_URL` environment variable.
 
-
-The production frontend communicates with the FastAPI backend through the `NEXT\_PUBLIC\_API\_URL` environment variable.
-
-
-
-\### Backend
-
-
+### Backend
 
 The FastAPI backend is deployed using Render.
 
-
-
 The backend connects securely to Databricks using environment variables stored in Render.
 
-
-
-\### Data Platform
-
-
+### Data Platform
 
 The application uses Databricks SQL Warehouse as its analytics data source.
 
-
-
-\## Application Flow
-
-
+## Application Flow
 
 When a user searches for a movie:
 
-
-
 ```text
-
 User
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Next.js Search UI
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 FastAPI API
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Databricks SQL
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Movie Results
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Next.js UI
-
 ```
-
-
 
 For analytics pages:
 
-
-
 ```text
-
 Next.js
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 FastAPI
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 Databricks Gold Tables
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 JSON Response
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 Charts and Tables
-
 ```
 
-
-
-\## Project Structure
-
-
+## Project Structure
 
 ```text
-
 box-office-analytics/
-
 |
-
 ├── Backend/
-
 │   ├── main.py
-
 │   └── requirements.txt
-
 |
-
 ├── Frontend/
-
 │   ├── public/
-
 │   ├── src/
-
 │   │   └── app/
-
 │   │       ├── components/
-
 │   │       │   └── Navbar.tsx
-
 │   │       ├── movies/
-
-│   │       │   └── \[movie\_id]/
-
+│   │       │   └── [movie_id]/
 │   │       │       └── page.tsx
-
 │   │       ├── rankings/
-
 │   │       │   └── page.tsx
-
 │   │       ├── years/
-
 │   │       │   └── page.tsx
-
 │   │       ├── globals.css
-
 │   │       ├── layout.tsx
-
 │   │       └── page.tsx
-
 │   ├── package.json
-
 │   └── next.config.ts
-
 |
-
 ├── .gitignore
-
 └── README.md
-
 ```
 
-
-
-\## Security
-
-
+## Security
 
 Sensitive credentials are kept outside the repository.
 
-
-
 The following files and credentials should never be committed:
 
-
-
 ```text
-
 .env
-
 .env.local
-
-.env.\*.local
-
-DATABRICKS\_TOKEN
-
-DATABRICKS\_SERVER\_HOSTNAME
-
-DATABRICKS\_HTTP\_PATH
-
+.env.*.local
+DATABRICKS_TOKEN
+DATABRICKS_SERVER_HOSTNAME
+DATABRICKS_HTTP_PATH
 ```
-
-
 
 The project uses environment variables for local development and cloud deployment.
 
-
-
-\## Future Improvements
-
-
+## Future Improvements
 
 Potential future improvements include:
 
+* Genre-based analytics
+* Actor and director analytics
+* Production house rankings
+* Year-over-year growth analysis
+* Language-wise box office analysis
+* Advanced movie comparison
+* Revenue trend forecasting
+* More detailed movie-level charts
+* Automated data refresh pipelines
+* Authentication
+* Personalized dashboards
 
-
-\* Genre-based analytics
-
-\* Actor and director analytics
-
-\* Production house rankings
-
-\* Year-over-year growth analysis
-
-\* Language-wise box office analysis
-
-\* Advanced movie comparison
-
-\* Revenue trend forecasting
-
-\* More detailed movie-level charts
-
-\* Automated data refresh pipelines
-
-\* Authentication
-
-\* Personalized dashboards
-
-
-
-\## Project Goals
-
-
+## Project Goals
 
 This project demonstrates an end-to-end data engineering and analytics workflow:
 
-
-
 ```text
-
 Data
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Databricks
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 SQL Analytics
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 FastAPI
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 REST APIs
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Next.js
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Interactive Analytics
-
-&#x20;|
-
-&#x20;v
-
+ |
+ v
 Cloud Deployment
-
 ```
-
-
 
 The project combines data engineering, SQL analytics, backend development, frontend development, visualization, and cloud deployment into a single production-style application.
 
-
-
-\## Author
-
-
+## Author
 
 Harsh
 
-
-
 GitHub:
 
-
-
-\[https://github.com/OkayHarshh](https://github.com/OkayHarshh)
-
-
+[https://github.com/OkayHarshh](https://github.com/OkayHarshh)
 
 ````
 
-
+**Only change this one line before saving:**
 
 ```text
-
 https://box-office-analytics-five.vercel.app/
-
 ````
-
-
-
 
 
