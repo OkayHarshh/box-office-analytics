@@ -1,4 +1,4 @@
-Got you. No emojis. Paste this entire block into `README.md` in Notepad.
+
 
 ````markdown
 # Box Office Analytics
