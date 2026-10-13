@@ -111,7 +111,7 @@ export default function MoviePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-black text-white">
+      <main className="cinema-page min-h-screen">
 
         <Navbar />
 
@@ -147,7 +147,7 @@ export default function MoviePage() {
 
   if (!movie) {
     return (
-      <main className="min-h-screen bg-black text-white">
+      <main className="cinema-page min-h-screen">
 
         <Navbar />
 
@@ -219,7 +219,7 @@ export default function MoviePage() {
       : 0;
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white">
+    <main className="cinema-page min-h-screen overflow-x-hidden">
 
       <Navbar />
 
@@ -227,7 +227,7 @@ export default function MoviePage() {
           HERO
       ====================================================== */}
 
-      <section className="relative border-b border-zinc-900">
+      <section className="cinema-hero relative border-b border-zinc-900">
 
         {/* Background */}
 

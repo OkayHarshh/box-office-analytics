@@ -109,7 +109,7 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white">
+    <main className="cinema-page cinema-home min-h-screen overflow-x-hidden">
 
       <Navbar />
 
@@ -117,7 +117,24 @@ export default function Home() {
           HERO
       ====================================================== */}
 
-      <section className="relative border-b border-zinc-900">
+      <section className="cinema-hero relative border-b border-[#2d2e34]">
+
+        <div className="cinema-poster-art" aria-hidden="true">
+          <div className="poster-spark poster-spark-one">✦</div>
+          <div className="poster-spark poster-spark-two">✧</div>
+          <div className="marquee-card">
+            <div className="marquee-bulbs" />
+            <span className="marquee-kicker">NOW SHOWING</span>
+            <strong>THE<br />BIG HITS</strong>
+            <span className="marquee-caption">INDIAN CINEMA · EST. 1950</span>
+            <div className="marquee-stars">★　✦　★</div>
+          </div>
+          <div className="ticket-stub">
+            <span>ADMIT ONE</span>
+            <strong>FRONT<br />ROW</strong>
+            <small>BOX OFFICE</small>
+          </div>
+        </div>
 
         {/* Background glow */}
 
@@ -133,46 +150,46 @@ export default function Home() {
 
           {/* Eyebrow */}
 
-          <div className="mb-7 flex items-center gap-3">
+          <div className="cinema-eyebrow mb-7 flex items-center gap-3">
 
             <span className="h-px w-8 bg-zinc-600" />
 
-            <p className="text-xs font-medium uppercase tracking-[0.35em] text-zinc-500">
-              Indian Box Office Analytics
+            <p className="text-xs font-medium uppercase tracking-[0.35em] text-[#aaa397]">
+              Lights · Camera · Box Office
             </p>
 
           </div>
 
           {/* Heading */}
 
-          <h1 className="max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-8xl">
+          <h1 className="max-w-3xl text-5xl font-black leading-[0.96] tracking-[-0.055em] sm:text-6xl md:text-7xl">
 
-            The numbers
+            Bollywood's biggest
             <br />
 
-            <span className="text-zinc-500">
-              behind Indian cinema.
+            <span>
+              box office stories.
             </span>
 
           </h1>
 
           <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
 
-            <p className="max-w-xl text-base leading-7 text-zinc-400 md:text-lg">
-              Explore lifetime collections, rankings and
-              box office trends across Indian cinema from
-              1950 to 2023.
+            <p className="max-w-xl text-base leading-7 md:text-lg">
+              First-day fireworks. Whistle-worthy blockbusters.
+              The legends that filled every seat. Take your front-row
+              seat to Indian cinema's biggest hits, from 1950 to 2023.
             </p>
 
             {/* Small stat */}
 
-            <div className="hidden border-l border-zinc-800 pl-6 md:block">
+            <div className="coverage-stamp hidden border-l pl-6 md:block">
 
-              <p className="text-xs uppercase tracking-[0.25em] text-zinc-600">
+              <p className="text-xs uppercase tracking-[0.25em]">
                 Coverage
               </p>
 
-              <p className="mt-2 text-2xl font-medium">
+              <p className="mt-2 text-2xl font-bold">
                 1950 — 2023
               </p>
 
@@ -187,17 +204,17 @@ export default function Home() {
           <div className="relative mt-12 max-w-2xl">
 
             <div
-              className={`group flex items-center rounded-2xl border bg-zinc-950/80 px-5 py-4 shadow-2xl shadow-black transition-all duration-300 ${
+              className={`cinema-search group flex items-center rounded-2xl border px-5 py-4 shadow-2xl transition-all duration-300 ${
                 search.trim() !== ""
-                  ? "border-zinc-500"
-                  : "border-zinc-800 hover:border-zinc-600"
+                  ? "border-[#c6a66a]"
+                  : "border-[#2d2e34] hover:border-[#c6a66a]"
               }`}
             >
 
               {/* Search icon */}
 
               <svg
-                className="mr-4 h-5 w-5 shrink-0 text-zinc-500 transition-colors group-focus-within:text-white"
+                className="mr-4 h-5 w-5 shrink-0 text-[#c6a66a] transition-colors group-focus-within:text-[#d7c08d]"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.8"
@@ -218,12 +235,12 @@ export default function Home() {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-transparent text-base text-white outline-none placeholder:text-zinc-600"
-                placeholder="Search for a movie..."
+                className="w-full bg-transparent text-base outline-none"
+                placeholder="Find your all-time favourite movie..."
               />
 
               {searchLoading && (
-                <div className="ml-4 flex items-center gap-2 text-xs text-zinc-500">
+                <div className="ml-4 flex items-center gap-2 text-xs text-[#aaa397]">
 
                   <span className="h-3 w-3 animate-spin rounded-full border border-zinc-700 border-t-white" />
 
@@ -240,11 +257,11 @@ export default function Home() {
 
             {search.trim() !== "" && (
 
-              <div className="absolute left-0 right-0 top-full z-50 mt-3 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl shadow-black">
+              <div className="cinema-search-results absolute left-0 right-0 top-full z-50 mt-3 overflow-hidden rounded-2xl border shadow-2xl">
 
                 {searchLoading ? (
 
-                  <div className="px-5 py-6 text-sm text-zinc-500">
+                  <div className="px-5 py-6 text-sm text-[#aaa397]">
                     Searching movies...
                   </div>
 
@@ -293,7 +310,7 @@ export default function Home() {
 
                         </div>
 
-                        <p className="shrink-0 text-sm text-zinc-400">
+                        <p className="shrink-0 text-sm text-[#d7c08d]">
                           ₹
                           {Number(
                             movie.lifetime_cr || 0
@@ -309,7 +326,7 @@ export default function Home() {
 
                 ) : (
 
-                  <div className="px-5 py-6 text-sm text-zinc-500">
+                  <div className="px-5 py-6 text-sm text-[#aaa397]">
                     No movies found for "{search.trim()}"
                   </div>
 
@@ -331,9 +348,9 @@ export default function Home() {
 
       <section className="mx-auto max-w-7xl px-6 pt-12 sm:px-8">
 
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 sm:grid-cols-3">
+        <div className="cinema-stats grid grid-cols-1 overflow-hidden rounded-2xl border sm:grid-cols-3">
 
-          <div className="border-b border-zinc-900 p-6 sm:border-b-0 sm:border-r">
+          <div className="border-b p-6 sm:border-b-0 sm:border-r">
 
             <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">
               Ranking
@@ -349,7 +366,7 @@ export default function Home() {
 
           </div>
 
-          <div className="border-b border-zinc-900 p-6 sm:border-b-0 sm:border-r">
+          <div className="border-b p-6 sm:border-b-0 sm:border-r">
 
             <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">
               Collection
@@ -358,7 +375,7 @@ export default function Home() {
             <p className="mt-3 text-3xl font-semibold">
               ₹
               {visibleCollection.toLocaleString()}
-              <span className="ml-1 text-lg text-zinc-500">
+              <span className="ml-1 text-lg text-[#c6a66a]">
                 Cr
               </span>
             </p>
@@ -399,25 +416,25 @@ export default function Home() {
 
           <div>
 
-            <div className="flex items-center gap-3">
+            <div className="cinema-eyebrow flex items-center gap-3">
 
               <span className="h-px w-6 bg-zinc-700" />
 
-              <p className="text-xs uppercase tracking-[0.3em] text-zinc-600">
-                The Numbers
+              <p className="text-xs uppercase tracking-[0.3em]">
+                The House Is Full
               </p>
 
             </div>
 
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Top Lifetime Grossers
+            <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">
+              All-time crowd-pullers
             </h2>
 
           </div>
 
           <button
             onClick={() => router.push("/rankings")}
-            className="w-fit text-sm text-zinc-500 transition hover:text-white"
+            className="rankings-link w-fit text-sm font-bold transition"
           >
             View full rankings
             <span className="ml-2">→</span>
@@ -425,11 +442,11 @@ export default function Home() {
 
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
+        <div className="cinema-table overflow-hidden rounded-2xl border">
 
           {/* TABLE HEADER */}
 
-          <div className="hidden grid-cols-[80px_1fr_180px_100px] border-b border-zinc-900 bg-zinc-950 px-6 py-4 text-xs uppercase tracking-wider text-zinc-600 sm:grid">
+          <div className="hidden grid-cols-[80px_1fr_180px_100px] border-b border-[#2d2e34] bg-[#202126] px-6 py-4 text-xs uppercase tracking-wider text-zinc-600 sm:grid">
 
             <span>Rank</span>
 
@@ -493,7 +510,7 @@ export default function Home() {
 
           ) : movies.length === 0 ? (
 
-            <div className="px-6 py-16 text-center text-zinc-500">
+            <div className="px-6 py-16 text-center text-[#aaa397]">
               No box office data available.
             </div>
 
@@ -524,7 +541,7 @@ export default function Home() {
                       index === 0
                         ? "text-white"
                         : index < 3
-                        ? "text-zinc-400"
+                        ? "text-[#d7c08d]"
                         : "text-zinc-600"
                     }`}
                   >

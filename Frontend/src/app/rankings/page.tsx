@@ -83,7 +83,7 @@ export default function RankingsPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white">
+    <main className="cinema-page rankings-page min-h-screen overflow-x-hidden">
 
       <Navbar />
 
@@ -91,7 +91,7 @@ export default function RankingsPage() {
           HERO
       ====================================================== */}
 
-      <section className="relative border-b border-zinc-900">
+      <section className="cinema-hero relative border-b border-zinc-900">
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
 
@@ -113,7 +113,7 @@ export default function RankingsPage() {
 
           </div>
 
-          <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-8xl">
+          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
 
             The
             <br />
@@ -130,6 +130,41 @@ export default function RankingsPage() {
             and opening weekends.
           </p>
 
+          <div className="rankings-stage" aria-label={`Top three ${getRankingLabel()} rankings`}>
+            <div className="rankings-stage-heading">
+              <div>
+                <span className="rankings-stage-kicker">The leaderboard</span>
+                <p>Front row, top three</p>
+              </div>
+              <span className="ranking-count">TOP 20</span>
+            </div>
+
+            <div className="rankings-podium">
+              {[
+                { movie: movies[1], place: 2 },
+                { movie: movies[0], place: 1 },
+                { movie: movies[2], place: 3 },
+              ].map(({ movie, place }) => (
+                <div className={`podium-entry podium-place-${place}`} key={place}>
+                  <span className="podium-rank">{String(place).padStart(2, "0")}</span>
+                  <div className="podium-copy">
+                    <span>{movie?.movie_name || (loading ? "Counting the seats…" : "Awaiting the chart")}</span>
+                    <strong>
+                      {movie
+                        ? `₹${Number(getMovieValue(movie) || 0).toLocaleString()} Cr`
+                        : "—"}
+                    </strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="rankings-stage-foot">
+              <span className="rankings-stage-dot" />
+              <span>Ranked by {getRankingLabel().toLowerCase()} collection</span>
+            </div>
+          </div>
+
         </div>
 
       </section>
@@ -140,7 +175,7 @@ export default function RankingsPage() {
 
       <section className="mx-auto max-w-7xl px-6 pt-10 sm:px-8">
 
-        <div className="flex flex-wrap gap-2">
+        <div className="ranking-tabs flex flex-wrap gap-2">
 
           <button
             onClick={() =>
@@ -217,7 +252,7 @@ export default function RankingsPage() {
 
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
+        <div className="ranking-table overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
 
           {/* ==================================================
               TABLE HEADER

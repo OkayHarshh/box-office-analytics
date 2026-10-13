@@ -11,28 +11,28 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="border-b border-zinc-800 px-8 py-5">
+    <nav className="border-b border-[#2d2e34] bg-[#111216]/90 px-6 py-5 shadow-[0_8px_28px_rgba(0,0,0,0.24)] backdrop-blur sm:px-8">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
 
         {/* LOGO */}
 
         <button
           onClick={() => router.push("/")}
-          className="text-2xl font-bold tracking-tight hover:text-zinc-300"
+          className="text-xl font-black uppercase tracking-[0.12em] text-[#d7c08d] hover:scale-[1.02] sm:text-2xl"
         >
           BOX OFFICE
         </button>
 
         {/* NAVIGATION */}
 
-        <div className="flex gap-8 text-sm">
+        <div className="nav-links flex gap-4 text-sm sm:gap-8">
 
           <button
             onClick={() => router.push("/")}
             className={
               isActive("/")
-                ? "text-white"
-                : "text-zinc-400 hover:text-white"
+                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
+                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
             }
           >
             Movies
@@ -42,8 +42,8 @@ export default function Navbar() {
             onClick={() => router.push("/rankings")}
             className={
               isActive("/rankings")
-                ? "text-white"
-                : "text-zinc-400 hover:text-white"
+                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
+                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
             }
           >
             Rankings
@@ -53,8 +53,8 @@ export default function Navbar() {
             onClick={() => router.push("/years")}
             className={
               isActive("/years")
-                ? "text-white"
-                : "text-zinc-400 hover:text-white"
+                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
+                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
             }
           >
             Years

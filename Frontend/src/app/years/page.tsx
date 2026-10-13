@@ -104,7 +104,7 @@ export default function YearsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-black text-white">
+      <main className="cinema-page years-page min-h-screen">
         <Navbar />
 
         <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8">
@@ -137,7 +137,7 @@ export default function YearsPage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-black text-white">
+      <main className="cinema-page years-page min-h-screen">
         <Navbar />
 
         <section className="mx-auto flex min-h-[70vh] max-w-7xl items-center justify-center px-6 sm:px-8">
@@ -171,7 +171,7 @@ export default function YearsPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-black text-white">
+    <main className="cinema-page years-page min-h-screen overflow-x-hidden">
 
       <Navbar />
 
@@ -179,7 +179,7 @@ export default function YearsPage() {
           HERO
       ====================================================== */}
 
-      <section className="relative border-b border-zinc-900">
+      <section className="cinema-hero relative border-b border-zinc-900">
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
 
@@ -201,7 +201,7 @@ export default function YearsPage() {
 
           </div>
 
-          <h1 className="max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-8xl">
+          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
 
             Box Office
             <br />
@@ -217,6 +217,35 @@ export default function YearsPage() {
             performance evolved from 1950 through 2023.
           </p>
 
+          <div className="years-reel" aria-label="Timeline of Indian cinema from 1950 to 2023">
+            <div className="years-reel-heading">
+              <span>THE CINEMA TIMELINE</span>
+              <strong>74 years on the big screen</strong>
+            </div>
+
+            <div className="years-timeline">
+              <div className="timeline-line" />
+              {[
+                { year: "1950", label: "THE FIRST FRAME" },
+                { year: "1970", label: "GOLDEN AGE" },
+                { year: "1990", label: "NEW WAVE" },
+                { year: "2010", label: "BIG SCREEN ERA" },
+                { year: "2023", label: "THE LATEST CHAPTER" },
+              ].map((milestone, index) => (
+                <div className="timeline-milestone" key={milestone.year}>
+                  <span className={`timeline-marker ${index === 0 || index === 4 ? "timeline-marker-edge" : ""}`} />
+                  <strong>{milestone.year}</strong>
+                  <small>{milestone.label}</small>
+                </div>
+              ))}
+            </div>
+
+            <div className="years-reel-foot">
+              <span>FROM BLACK-AND-WHITE CLASSICS</span>
+              <span>TO MODERN BLOCKBUSTERS</span>
+            </div>
+          </div>
+
         </div>
 
       </section>
@@ -227,7 +256,7 @@ export default function YearsPage() {
 
       <section className="mx-auto max-w-7xl px-6 pt-12 sm:px-8">
 
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 md:grid-cols-3">
+        <div className="years-summary grid grid-cols-1 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 md:grid-cols-3">
 
           {/* YEARS */}
 
@@ -334,7 +363,7 @@ export default function YearsPage() {
 
         </div>
 
-        <div className="rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
+        <div className="years-chart rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
 
           <div className="h-[380px] w-full sm:h-[450px]">
 
@@ -352,14 +381,14 @@ export default function YearsPage() {
 
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#18181b"
+                  stroke="#2d2e34"
                 />
 
                 <XAxis
                   dataKey="year"
-                  stroke="#52525b"
+                  stroke="#85847f"
                   tick={{
-                    fill: "#52525b",
+                    fill: "#85847f",
                     fontSize: 11,
                   }}
                   tickLine={false}
@@ -367,9 +396,9 @@ export default function YearsPage() {
                 />
 
                 <YAxis
-                  stroke="#52525b"
+                  stroke="#85847f"
                   tick={{
-                    fill: "#52525b",
+                    fill: "#85847f",
                     fontSize: 11,
                   }}
                   tickLine={false}
@@ -378,13 +407,13 @@ export default function YearsPage() {
 
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#09090b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#191a1f",
+                    border: "1px solid #2d2e34",
                     borderRadius: "12px",
-                    color: "#ffffff",
+                    color: "#f2eee5",
                   }}
                   labelStyle={{
-                    color: "#a1a1aa",
+                    color: "#aaa397",
                     marginBottom: "5px",
                   }}
                   formatter={(value: any) => [
@@ -396,7 +425,7 @@ export default function YearsPage() {
                 <Line
                   type="monotone"
                   dataKey="total_lifetime_cr"
-                  stroke="#ffffff"
+                  stroke="#c6a66a"
                   strokeWidth={2}
                   dot={false}
                   activeDot={{
@@ -442,7 +471,7 @@ export default function YearsPage() {
 
         </div>
 
-        <div className="rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
+        <div className="years-chart rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
 
           <div className="h-[380px] w-full sm:h-[450px]">
 
@@ -460,14 +489,14 @@ export default function YearsPage() {
 
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#18181b"
+                  stroke="#2d2e34"
                 />
 
                 <XAxis
                   dataKey="year"
-                  stroke="#52525b"
+                  stroke="#85847f"
                   tick={{
-                    fill: "#52525b",
+                    fill: "#85847f",
                     fontSize: 11,
                   }}
                   tickLine={false}
@@ -475,9 +504,9 @@ export default function YearsPage() {
                 />
 
                 <YAxis
-                  stroke="#52525b"
+                  stroke="#85847f"
                   tick={{
-                    fill: "#52525b",
+                    fill: "#85847f",
                     fontSize: 11,
                   }}
                   tickLine={false}
@@ -486,13 +515,13 @@ export default function YearsPage() {
 
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#09090b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#191a1f",
+                    border: "1px solid #2d2e34",
                     borderRadius: "12px",
-                    color: "#ffffff",
+                    color: "#f2eee5",
                   }}
                   labelStyle={{
-                    color: "#a1a1aa",
+                    color: "#aaa397",
                     marginBottom: "5px",
                   }}
                   formatter={(value: any) => [
@@ -503,7 +532,7 @@ export default function YearsPage() {
 
                 <Bar
                   dataKey="movie_count"
-                  fill="#ffffff"
+                  fill="#c6a66a"
                   radius={[4, 4, 0, 0]}
                   maxBarSize={18}
                 />
@@ -592,7 +621,7 @@ export default function YearsPage() {
 
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
+        <div className="years-table overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
 
           {/* TABLE HEADER */}
 
