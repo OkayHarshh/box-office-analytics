@@ -1,13 +1,11 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 
-type RankingType =
-  | "lifetime"
-  | "opening-day"
-  | "opening-weekend";
+type RankingType = "lifetime" | "opening-day" | "opening-weekend";
 
 export default function RankingsPage() {
   const router = useRouter();
@@ -15,13 +13,8 @@ export default function RankingsPage() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
   const [activeRanking, setActiveRanking] =
     useState<RankingType>("lifetime");
-
-  // ============================================================
-  // LOAD RANKINGS
-  // ============================================================
 
   useEffect(() => {
     loadRankings(activeRanking);
@@ -31,449 +24,270 @@ export default function RankingsPage() {
     setLoading(true);
     setError(false);
 
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/rankings/${type}`
-    )
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/rankings/${type}`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch rankings");
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch rankings");
         return response.json();
       })
-      .then((data) => {
-        setMovies(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching rankings:", error);
+      .then((data) => setMovies(data))
+      .catch((err) => {
+        console.error("Error fetching rankings:", err);
         setMovies([]);
         setError(true);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }
 
-  // ============================================================
-  // RANKING LABEL
-  // ============================================================
-
   function getRankingLabel() {
-    if (activeRanking === "opening-day") {
-      return "Opening Day";
-    }
-
-    if (activeRanking === "opening-weekend") {
-      return "Opening Weekend";
-    }
-
+    if (activeRanking === "opening-day") return "Opening Day";
+    if (activeRanking === "opening-weekend") return "Opening Weekend";
     return "Lifetime";
   }
 
-  // ============================================================
-  // VALUE
-  // ============================================================
-
   function getMovieValue(movie: any) {
-    if (activeRanking === "lifetime") {
-      return movie.lifetime_cr;
-    }
-
-    return movie.value;
+    return activeRanking === "lifetime" ? movie.lifetime_cr : movie.value;
   }
+
+  const podium = [
+    { movie: movies[1], place: 2 },
+    { movie: movies[0], place: 1 },
+    { movie: movies[2], place: 3 },
+  ];
 
   return (
     <main className="cinema-page rankings-page min-h-screen overflow-x-hidden">
-
       <Navbar />
 
-      {/* ======================================================
-          HERO
-      ====================================================== */}
+      {/* CINEMATIC HERO */}
+      <section className="hall-hero">
+        <div className="hall-grain" />
+        <div className="hall-curtain hall-curtain-left" />
+        <div className="hall-curtain hall-curtain-right" />
 
-      <section className="cinema-hero relative border-b border-zinc-900">
+        <div className="hall-hero-inner">
+          <div className="hall-copy">
+            <div className="hall-eyebrow">
+              <span />
+              THE INDIAN CINEMA HALL OF FAME
+            </div>
 
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <p className="hall-edition">THE BOX OFFICE ARCHIVES · EST. 1950</p>
 
-          <div className="absolute -right-40 top-0 h-[450px] w-[450px] rounded-full bg-white/[0.025] blur-3xl" />
+            <h1>
+              Legends
+              <br />
+              <span>of the</span>
+              <br />
+              Box Office<span className="hall-period">.</span>
+            </h1>
 
-          <div className="absolute left-[-150px] top-40 h-[350px] w-[350px] rounded-full bg-zinc-500/[0.02] blur-3xl" />
-
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 md:py-32">
-
-          <div className="mb-7 flex items-center gap-3">
-
-            <span className="h-px w-8 bg-zinc-600" />
-
-            <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">
-              Indian Box Office Analytics
+            <p className="hall-description">
+              Some films entertain. Some films make history.
+              Explore the biggest theatrical milestones in Indian cinema.
             </p>
 
+            <div className="hall-hero-meta">
+              <span>1950 — 2023</span>
+              <i />
+              <span>THE DEFINITIVE LEDGER</span>
+            </div>
           </div>
 
-          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
+          <div className="bachchan-frame">
+            <div className="bachchan-frame-top">
+              <span>THE LEGENDS COLLECTION</span>
+              <span>NO. 001</span>
+            </div>
 
-            The
-            <br />
-
-            <span className="text-zinc-500">
-              Rankings.
-            </span>
-
-          </h1>
-
-          <p className="mt-8 max-w-xl text-base leading-7 text-zinc-400 md:text-lg">
-            Explore India's biggest box office performers,
-            ranked across lifetime collections, opening days
-            and opening weekends.
-          </p>
-
-          <div className="rankings-stage" aria-label={`Top three ${getRankingLabel()} rankings`}>
-            <div className="rankings-stage-heading">
-              <div>
-                <span className="rankings-stage-kicker">The leaderboard</span>
-                <p>Front row, top three</p>
+            <div className="bachchan-photo-wrap">
+              <img
+                src="/amitabh-bachchan.jpg"
+                alt="Amitabh Bachchan in a vintage film still"
+                className="bachchan-photo"
+              />
+              <div className="bachchan-photo-shade" />
+              <div className="bachchan-caption">
+                <span>THE ANGRY YOUNG MAN</span>
+                <strong>AMITABH BACHCHAN</strong>
+                <small>A LEGACY THAT FILLED THEATRES</small>
               </div>
-              <span className="ranking-count">TOP 20</span>
             </div>
 
-            <div className="rankings-podium">
-              {[
-                { movie: movies[1], place: 2 },
-                { movie: movies[0], place: 1 },
-                { movie: movies[2], place: 3 },
-              ].map(({ movie, place }) => (
-                <div className={`podium-entry podium-place-${place}`} key={place}>
-                  <span className="podium-rank">{String(place).padStart(2, "0")}</span>
-                  <div className="podium-copy">
-                    <span>{movie?.movie_name || (loading ? "Counting the seats…" : "Awaiting the chart")}</span>
-                    <strong>
-                      {movie
-                        ? `₹${Number(getMovieValue(movie) || 0).toLocaleString()} Cr`
-                        : "—"}
-                    </strong>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="rankings-stage-foot">
-              <span className="rankings-stage-dot" />
-              <span>Ranked by {getRankingLabel().toLowerCase()} collection</span>
+            <div className="bachchan-frame-bottom">
+              <span>INDIAN CINEMA</span>
+              <span>FOREVER ON SCREEN</span>
             </div>
           </div>
-
         </div>
 
-      </section>
-
-      {/* ======================================================
-          FILTERS
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pt-10 sm:px-8">
-
-        <div className="ranking-tabs flex flex-wrap gap-2">
-
-          <button
-            onClick={() =>
-              setActiveRanking("lifetime")
-            }
-            className={`rounded-xl px-5 py-2.5 text-sm font-medium transition ${
-              activeRanking === "lifetime"
-                ? "bg-white text-black"
-                : "border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-600 hover:text-white"
-            }`}
-          >
-            Lifetime
-          </button>
-
-          <button
-            onClick={() =>
-              setActiveRanking("opening-day")
-            }
-            className={`rounded-xl px-5 py-2.5 text-sm font-medium transition ${
-              activeRanking === "opening-day"
-                ? "bg-white text-black"
-                : "border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-600 hover:text-white"
-            }`}
-          >
-            Opening Day
-          </button>
-
-          <button
-            onClick={() =>
-              setActiveRanking("opening-weekend")
-            }
-            className={`rounded-xl px-5 py-2.5 text-sm font-medium transition ${
-              activeRanking === "opening-weekend"
-                ? "bg-white text-black"
-                : "border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-600 hover:text-white"
-            }`}
-          >
-            Opening Weekend
-          </button>
-
+        <div className="hall-bottom-line">
+          <span>LIGHTS</span>
+          <span>CAMERA</span>
+          <span>BOX OFFICE</span>
+          <span>ACTION</span>
         </div>
-
       </section>
 
-      {/* ======================================================
-          RANKING CONTENT
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8">
-
-        <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-
+      {/* TOP THREE */}
+      <section className="hall-podium-section">
+        <div className="hall-section-heading">
           <div>
-
-            <div className="flex items-center gap-3">
-
-              <span className="h-px w-6 bg-zinc-700" />
-
-              <p className="text-xs uppercase tracking-[0.3em] text-zinc-600">
-                Current Ranking
-              </p>
-
-            </div>
-
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              {getRankingLabel()}
-            </h2>
-
+            <span className="hall-section-kicker">THE FRONT ROW</span>
+            <h2>The biggest crowd-pullers.</h2>
+            <p>Three films. Three places in cinema history.</p>
           </div>
-
-          <p className="text-sm text-zinc-600">
-            Top 20 • 1950 — 2023
-          </p>
-
+          <span className="hall-section-number">01 / THE PODIUM</span>
         </div>
 
-        <div className="ranking-table overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
+        <div className="hall-podium">
+          {podium.map(({ movie, place }) => (
+            <button
+              key={place}
+              disabled={!movie}
+              onClick={() =>
+                movie && router.push(`/movies/${movie.movie_id}`)
+              }
+              className={`hall-podium-card hall-podium-${place}`}
+            >
+              <span className="podium-label">
+                {place === 1 ? "THE CHAMPION" : `POSITION 0${place}`}
+              </span>
 
-          {/* ==================================================
-              TABLE HEADER
-          ================================================== */}
+              <span className="podium-medal">
+                {place === 1 ? "I" : place === 2 ? "II" : "III"}
+              </span>
 
-          <div className="hidden grid-cols-[90px_1fr_220px_100px] border-b border-zinc-900 bg-zinc-950 px-6 py-4 text-xs uppercase tracking-wider text-zinc-600 sm:grid">
+              <strong className="podium-movie-name">
+                {movie?.movie_name ||
+                  (loading ? "Awaiting the screening" : "No film available")}
+              </strong>
 
-            <span>#</span>
+              <span className="podium-collection">
+                {movie
+                  ? `₹${Number(getMovieValue(movie) || 0).toLocaleString()} Cr`
+                  : "—"}
+              </span>
 
-            <span>Movie</span>
+              <span className="podium-bottom-label">
+                {getRankingLabel().toUpperCase()} COLLECTION
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
 
-            <span>
-              {getRankingLabel()}
-            </span>
-
-            <span>Rank</span>
-
+      {/* RANKING FILTERS */}
+      <section className="hall-ranking-section">
+        <div className="hall-section-heading hall-ledger-heading">
+          <div>
+            <span className="hall-section-kicker">THE OFFICIAL LEDGER</span>
+            <h2>Every crore tells a story.</h2>
+            <p>Explore the records that defined theatrical success.</p>
           </div>
+          <span className="hall-section-number">02 / THE ARCHIVE</span>
+        </div>
 
-          {/* ==================================================
-              LOADING
-          ================================================== */}
+        <div className="hall-filter-bar">
+          {[
+            { value: "lifetime", label: "Lifetime" },
+            { value: "opening-day", label: "Opening Day" },
+            { value: "opening-weekend", label: "Opening Weekend" },
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setActiveRanking(tab.value as RankingType)}
+              className={
+                activeRanking === tab.value ? "hall-filter-active" : ""
+              }
+            >
+              {tab.label}
+            </button>
+          ))}
+
+          <span className="hall-filter-note">
+            SHOWING · {getRankingLabel().toUpperCase()}
+          </span>
+        </div>
+
+        <div className="hall-table">
+          <div className="hall-table-header">
+            <span>RANK</span>
+            <span>FEATURE PRESENTATION</span>
+            <span>COLLECTION</span>
+            <span>POSITION</span>
+          </div>
 
           {loading ? (
-
-            <div className="space-y-px">
-
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-
-                <div
-                  key={item}
-                  className="flex items-center gap-5 border-b border-zinc-900 px-6 py-6 last:border-b-0"
-                >
-
-                  <div className="h-4 w-8 animate-pulse rounded bg-zinc-900" />
-
-                  <div className="h-4 w-1/3 animate-pulse rounded bg-zinc-900" />
-
-                  <div className="ml-auto h-4 w-28 animate-pulse rounded bg-zinc-900" />
-
-                </div>
-
+            <div className="hall-loading">
+              <div className="hall-loading-light" />
+              <p>THE PROJECTIONIST IS PREPARING THE SHOW</p>
+              {[1, 2, 3, 4, 5].map((item) => (
+                <div className="hall-skeleton" key={item} />
               ))}
-
             </div>
-
           ) : error ? (
-
-            <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 text-zinc-600">
-                !
-              </div>
-
-              <p className="text-zinc-300">
-                Unable to load rankings.
-              </p>
-
-              <p className="mt-2 max-w-sm text-sm text-zinc-600">
-                Check that the backend is running and try again.
-              </p>
-
-              <button
-                onClick={() =>
-                  loadRankings(activeRanking)
-                }
-                className="mt-6 rounded-xl border border-zinc-700 px-5 py-2.5 text-sm text-zinc-300 transition hover:border-zinc-500 hover:bg-zinc-900 hover:text-white"
-              >
-                Try Again
+            <div className="hall-empty">
+              <span className="hall-error-icon">!</span>
+              <h3>The screening was interrupted.</h3>
+              <p>We couldn't retrieve the box office records.</p>
+              <button onClick={() => loadRankings(activeRanking)}>
+                TRY AGAIN ↻
               </button>
-
             </div>
-
           ) : movies.length === 0 ? (
-
-            <div className="px-6 py-16 text-center text-zinc-500">
-              No ranking data available.
+            <div className="hall-empty">
+              <h3>No records in this screening.</h3>
+              <p>There is no ranking data available for this category.</p>
             </div>
-
           ) : (
+            movies.map((movie, index) => (
+              <button
+                key={movie.movie_id}
+                onClick={() => router.push(`/movies/${movie.movie_id}`)}
+                className={`hall-movie-row ${
+                  index === 0 ? "hall-row-first" : ""
+                }`}
+              >
+                <span className="hall-row-rank">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-            movies.map((movie, index) => {
-
-              const value = getMovieValue(movie);
-
-              return (
-
-                <div
-                  key={movie.movie_id}
-                  onClick={() =>
-                    router.push(
-                      `/movies/${movie.movie_id}`
-                    )
-                  }
-                  className={`group cursor-pointer border-b border-zinc-900 px-5 py-5 transition-all duration-200 last:border-b-0 hover:bg-zinc-900/70 sm:grid sm:grid-cols-[90px_1fr_220px_100px] sm:items-center sm:px-6 ${
-                    index === 0
-                      ? "bg-zinc-900/30"
-                      : ""
-                  }`}
-                >
-
-                  {/* POSITION */}
-
-                  <div className="mb-3 flex items-center justify-between sm:mb-0">
-
-                    <span
-                      className={`text-lg font-medium ${
-                        index === 0
-                          ? "text-white"
-                          : index < 3
-                          ? "text-zinc-400"
-                          : "text-zinc-600"
-                      }`}
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <span className="text-xs text-zinc-700 sm:hidden">
-                      #{movie.rank}
-                    </span>
-
-                  </div>
-
-                  {/* MOVIE */}
-
-                  <div className="flex items-center gap-4">
-
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-xs transition ${
-                        index === 0
-                          ? "border-zinc-600 bg-zinc-800 text-white"
-                          : index === 1
-                          ? "border-zinc-700 bg-zinc-900 text-zinc-300"
-                          : index === 2
-                          ? "border-zinc-800 bg-zinc-900 text-zinc-400"
-                          : "border-zinc-900 bg-black text-zinc-700"
-                      }`}
-                    >
-                      {index + 1}
-                    </div>
-
-                    <div className="min-w-0">
-
-                      <p className="truncate font-medium text-zinc-200 transition group-hover:text-white">
-                        {movie.movie_name}
-                      </p>
-
-                      <p className="mt-1 text-xs text-zinc-600">
-                        Indian cinema
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  {/* VALUE */}
-
-                  <div className="mt-4 flex items-center justify-between sm:mt-0 sm:block">
-
-                    <span className="text-xs uppercase tracking-wider text-zinc-700 sm:hidden">
-                      {getRankingLabel()}
-                    </span>
-
-                    <span className="font-medium">
-
-                      ₹
-                      {Number(
-                        value || 0
-                      ).toLocaleString()}{" "}
-                      Cr
-
-                    </span>
-
-                  </div>
-
-                  {/* RANK */}
-
-                  <span className="hidden text-zinc-600 sm:block">
-                    #{movie.rank}
+                <span className="hall-row-movie">
+                  <span className="hall-film-reel">▶</span>
+                  <span className="hall-row-title">
+                    <strong>{movie.movie_name}</strong>
+                    <small>INDIAN CINEMA · FEATURE PRESENTATION</small>
                   </span>
+                </span>
 
-                </div>
+                <span className="hall-row-value">
+                  ₹{Number(getMovieValue(movie) || 0).toLocaleString()} Cr
+                </span>
 
-              );
-
-            })
-
+                <span className="hall-row-position">
+                  #{movie.rank}
+                  <span>↗</span>
+                </span>
+              </button>
+            ))
           )}
-
         </div>
 
+        <div className="hall-table-footer">
+          <span>BOX OFFICE ARCHIVES</span>
+          <span>FIGURES IN ₹ CRORES</span>
+          <span>END OF TRANSMISSION · 2023</span>
+        </div>
       </section>
 
-      {/* ======================================================
-          FOOTER
-      ====================================================== */}
-
-      <footer className="border-t border-zinc-900">
-
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-
-          <div>
-
-            <p className="text-sm font-medium tracking-wide">
-              BOX OFFICE
-            </p>
-
-            <p className="mt-1 text-xs text-zinc-700">
-              Indian cinema analytics
-            </p>
-
-          </div>
-
-          <p className="text-xs text-zinc-700">
-            Data through 2023
-          </p>
-
+      <footer className="hall-footer">
+        <div>
+          <strong>BOX OFFICE</strong>
+          <span>THE CINEMA LEDGER</span>
         </div>
-
+        <p>CELEBRATING THE FILMS THAT FILLED OUR THEATRES.</p>
+        <span>1950 — 2023</span>
       </footer>
-
     </main>
   );
 }

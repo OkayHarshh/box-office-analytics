@@ -6,62 +6,79 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isActive = (path: string) => {
-    return pathname === path;
-  };
+  const navItems = [
+    { label: "Movies", path: "/" },
+    { label: "Rankings", path: "/rankings" },
+    { label: "Years", path: "/years" },
+  ];
 
   return (
-    <nav className="border-b border-[#2d2e34] bg-[#111216]/90 px-6 py-5 shadow-[0_8px_28px_rgba(0,0,0,0.24)] backdrop-blur sm:px-8">
-      <div className="mx-auto flex max-w-7xl items-center justify-between">
-
-        {/* LOGO */}
-
+    <nav className="theatre-navbar sticky top-0 z-50">
+      <div className="theatre-navbar-inner">
         <button
           onClick={() => router.push("/")}
-          className="text-xl font-black uppercase tracking-[0.12em] text-[#d7c08d] hover:scale-[1.02] sm:text-2xl"
+          className="theatre-brand"
+          aria-label="Box Office home"
         >
-          BOX OFFICE
+          <svg
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect
+              x="5"
+              y="15"
+              width="38"
+              height="27"
+              rx="2"
+              fill="#4D1720"
+              stroke="#D3B477"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M5 15L9 5L44 10L40 20L5 15Z"
+              fill="#D3B477"
+              stroke="#E9D3A5"
+              strokeWidth="1.3"
+            />
+            <path d="M14 6L21 7L17 17L10 16L14 6Z" fill="#291416" />
+            <path d="M29 8L36 9L32 19L25 18L29 8Z" fill="#291416" />
+            <path
+              d="M13 27H35M13 33H29"
+              stroke="#E9D3A5"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+            />
+          </svg>
+
+          <span>
+            <strong>BOX OFFICE</strong>
+            <small>THE CINEMA LEDGER</small>
+          </span>
         </button>
 
-        {/* NAVIGATION */}
+        <div className="theatre-nav-links">
+          {navItems.map((item) => {
+            const active = pathname === item.path;
 
-        <div className="nav-links flex gap-4 text-sm sm:gap-8">
-
-          <button
-            onClick={() => router.push("/")}
-            className={
-              isActive("/")
-                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
-                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
-            }
-          >
-            Movies
-          </button>
-
-          <button
-            onClick={() => router.push("/rankings")}
-            className={
-              isActive("/rankings")
-                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
-                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
-            }
-          >
-            Rankings
-          </button>
-
-          <button
-            onClick={() => router.push("/years")}
-            className={
-              isActive("/years")
-                ? "rounded-full border border-[#66583e] bg-[#302b22] px-3 py-1.5 text-[#d7c08d] shadow-[0_4px_16px_rgba(0,0,0,0.24)]"
-                : "rounded-full px-3 py-1.5 text-[#a6a39c] hover:bg-[#24252a] hover:text-[#f2eee5]"
-            }
-          >
-            Years
-          </button>
-
+            return (
+              <button
+                key={item.path}
+                onClick={() => router.push(item.path)}
+                aria-current={active ? "page" : undefined}
+                className={active ? "active" : ""}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </div>
 
+        <div className="navbar-status">
+          <span />
+          THE SHOW IS ON
+        </div>
       </div>
     </nav>
   );

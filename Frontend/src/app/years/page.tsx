@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -19,10 +20,6 @@ export default function YearsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // ============================================================
-  // LOAD YEARLY DATA
-  // ============================================================
-
   useEffect(() => {
     loadYears();
   }, []);
@@ -33,62 +30,53 @@ export default function YearsPage() {
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/years`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch yearly data");
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch yearly data");
         return response.json();
       })
-      .then((data) => {
-        console.log("Yearly data:", data);
-        setYears(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching yearly data:", error);
+      .then((data) => setYears(data))
+      .catch((err) => {
+        console.error("Error fetching yearly data:", err);
         setYears([]);
         setError(true);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }
 
-  // ============================================================
-  // SUMMARY DATA
-  // ============================================================
+  const sortedYears = useMemo(
+    () => [...years].sort((a, b) => Number(a.year) - Number(b.year)),
+    [years]
+  );
 
-  const totalMovies = useMemo(() => {
-    return years.reduce(
-      (sum, year) => sum + Number(year.movie_count || 0),
-      0
-    );
-  }, [years]);
+  const totalMovies = useMemo(
+    () =>
+      years.reduce(
+        (sum, year) => sum + Number(year.movie_count || 0),
+        0
+      ),
+    [years]
+  );
 
-  const totalLifetime = useMemo(() => {
-    return years.reduce(
-      (sum, year) =>
-        sum + Number(year.total_lifetime_cr || 0),
-      0
-    );
-  }, [years]);
+  const totalLifetime = useMemo(
+    () =>
+      years.reduce(
+        (sum, year) => sum + Number(year.total_lifetime_cr || 0),
+        0
+      ),
+    [years]
+  );
 
   const biggestYear = useMemo(() => {
-    if (years.length === 0) {
-      return null;
-    }
+    if (!years.length) return null;
 
     return years.reduce((max, year) =>
-      Number(year.movie_count || 0) >
-      Number(max.movie_count || 0)
+      Number(year.movie_count || 0) > Number(max.movie_count || 0)
         ? year
         : max
     );
   }, [years]);
 
   const highestCollectionYear = useMemo(() => {
-    if (years.length === 0) {
-      return null;
-    }
+    if (!years.length) return null;
 
     return years.reduce((max, year) =>
       Number(year.highest_lifetime_cr || 0) >
@@ -98,73 +86,29 @@ export default function YearsPage() {
     );
   }, [years]);
 
-  // ============================================================
-  // LOADING
-  // ============================================================
-
   if (loading) {
     return (
       <main className="cinema-page years-page min-h-screen">
         <Navbar />
-
-        <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8">
-
-          <div className="h-4 w-48 animate-pulse rounded bg-zinc-900" />
-
-          <div className="mt-6 h-20 max-w-2xl animate-pulse rounded bg-zinc-900" />
-
-          <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
-
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="h-36 animate-pulse rounded-2xl border border-zinc-900 bg-zinc-950"
-              />
-            ))}
-
-          </div>
-
-          <div className="mt-12 h-[450px] animate-pulse rounded-2xl border border-zinc-900 bg-zinc-950" />
-
+        <section className="years-loading-screen">
+          <div className="years-projector-light" />
+          <div className="years-loading-reel">▶</div>
+          <p>PREPARING THE ARCHIVES</p>
+          <span>PLEASE TAKE YOUR SEAT</span>
         </section>
       </main>
     );
   }
 
-  // ============================================================
-  // ERROR
-  // ============================================================
-
   if (error) {
     return (
       <main className="cinema-page years-page min-h-screen">
         <Navbar />
-
-        <section className="mx-auto flex min-h-[70vh] max-w-7xl items-center justify-center px-6 sm:px-8">
-
-          <div className="text-center">
-
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 text-zinc-600">
-              !
-            </div>
-
-            <h1 className="mt-6 text-2xl font-semibold">
-              Unable to load yearly analytics.
-            </h1>
-
-            <p className="mt-3 text-sm text-zinc-600">
-              Check that the backend is running and try again.
-            </p>
-
-            <button
-              onClick={loadYears}
-              className="mt-7 rounded-xl border border-zinc-700 px-5 py-2.5 text-sm text-zinc-300 transition hover:border-zinc-500 hover:bg-zinc-900 hover:text-white"
-            >
-              Try Again
-            </button>
-
-          </div>
-
+        <section className="years-error-screen">
+          <span>THE ARCHIVE IS TEMPORARILY CLOSED</span>
+          <h1>We lost the projection.</h1>
+          <p>Unable to load yearly analytics. Please check the backend and try again.</p>
+          <button onClick={loadYears}>RESTART SCREENING ↻</button>
         </section>
       </main>
     );
@@ -172,582 +116,382 @@ export default function YearsPage() {
 
   return (
     <main className="cinema-page years-page min-h-screen overflow-x-hidden">
-
       <Navbar />
 
-      {/* ======================================================
-          HERO
-      ====================================================== */}
+      {/* HERO — CINEMA TIME MACHINE */}
+      <section className="time-machine-hero">
+        <div className="time-machine-grain" />
+        <div className="time-machine-curtain time-machine-curtain-left" />
+        <div className="time-machine-curtain time-machine-curtain-right" />
 
-      <section className="cinema-hero relative border-b border-zinc-900">
+        <div className="time-machine-inner">
+          <div className="time-machine-copy">
+            <div className="years-eyebrow">
+              <span />
+              THE INDIAN CINEMA ARCHIVE
+            </div>
 
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <p className="years-archive-number">ARCHIVE COLLECTION · 1950—2023</p>
 
-          <div className="absolute right-[-150px] top-[-100px] h-[500px] w-[500px] rounded-full bg-white/[0.025] blur-3xl" />
+            <h1>
+              A journey
+              <br />
+              through
+              <br />
+              <em>the years.</em>
+            </h1>
 
-          <div className="absolute left-[-180px] top-48 h-[400px] w-[400px] rounded-full bg-zinc-500/[0.02] blur-3xl" />
-
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 md:py-32">
-
-          <div className="mb-7 flex items-center gap-3">
-
-            <span className="h-px w-8 bg-zinc-600" />
-
-            <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">
-              Indian Box Office Analytics
+            <p className="years-hero-description">
+              Every era had its stars. Every decade had its blockbusters.
+              Travel through the numbers behind Indian cinema's theatrical history.
             </p>
 
-          </div>
-
-          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-6xl md:text-7xl">
-
-            Box Office
-            <br />
-
-            <span className="text-zinc-500">
-              Through The Years.
-            </span>
-
-          </h1>
-
-          <p className="mt-8 max-w-xl text-base leading-7 text-zinc-400 md:text-lg">
-            Explore how Indian cinema and box office
-            performance evolved from 1950 through 2023.
-          </p>
-
-          <div className="years-reel" aria-label="Timeline of Indian cinema from 1950 to 2023">
-            <div className="years-reel-heading">
-              <span>THE CINEMA TIMELINE</span>
-              <strong>74 years on the big screen</strong>
-            </div>
-
-            <div className="years-timeline">
-              <div className="timeline-line" />
-              {[
-                { year: "1950", label: "THE FIRST FRAME" },
-                { year: "1970", label: "GOLDEN AGE" },
-                { year: "1990", label: "NEW WAVE" },
-                { year: "2010", label: "BIG SCREEN ERA" },
-                { year: "2023", label: "THE LATEST CHAPTER" },
-              ].map((milestone, index) => (
-                <div className="timeline-milestone" key={milestone.year}>
-                  <span className={`timeline-marker ${index === 0 || index === 4 ? "timeline-marker-edge" : ""}`} />
-                  <strong>{milestone.year}</strong>
-                  <small>{milestone.label}</small>
-                </div>
-              ))}
-            </div>
-
-            <div className="years-reel-foot">
-              <span>FROM BLACK-AND-WHITE CLASSICS</span>
-              <span>TO MODERN BLOCKBUSTERS</span>
+            <div className="years-hero-stamp">
+              <span>74</span>
+              <div>
+                <strong>YEARS OF CINEMA</strong>
+                <small>ONE CONTINUOUS STORY</small>
+              </div>
             </div>
           </div>
 
+          <div className="film-reel-display">
+            <div className="film-reel-top">
+              <span>THE PASSAGE OF TIME</span>
+              <span>FRAME NO. 1950—2023</span>
+            </div>
+
+            <div className="film-strip">
+              <div className="film-holes">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <span key={i} />
+                ))}
+              </div>
+
+              <div className="film-frame film-frame-old">
+                <span>THE BEGINNING</span>
+                <strong>1950</strong>
+                <small>THE FIRST CHAPTER</small>
+              </div>
+
+              <div className="film-frame film-frame-middle">
+                <span>THE EVOLUTION</span>
+                <strong>1990</strong>
+                <small>A NEW CHAPTER</small>
+              </div>
+
+              <div className="film-frame film-frame-new">
+                <span>THE BIG SCREEN</span>
+                <strong>2023</strong>
+                <small>THE LATEST CHAPTER</small>
+              </div>
+
+              <div className="film-holes">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <span key={i} />
+                ))}
+              </div>
+            </div>
+
+            <div className="film-reel-bottom">
+              <span>ROLLING THROUGH HISTORY</span>
+              <span>◉ ◉ ◉</span>
+            </div>
+          </div>
         </div>
 
+        <div className="years-era-line">
+          <span>1950 · THE FIRST FRAME</span>
+          <span>1970 · ANOTHER ERA</span>
+          <span>1990 · THE NEW WAVE</span>
+          <span>2010 · THE BIG SCREEN</span>
+          <span>2023 · THE ARCHIVE</span>
+        </div>
       </section>
 
-      {/* ======================================================
-          SUMMARY
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pt-12 sm:px-8">
-
-        <div className="years-summary grid grid-cols-1 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 md:grid-cols-3">
-
-          {/* YEARS */}
-
-          <div className="border-b border-zinc-900 p-7 md:border-b-0 md:border-r">
-
-            <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">
-              Years Covered
-            </p>
-
-            <p className="mt-4 text-4xl font-semibold tracking-tight">
-              {years.length}
-            </p>
-
-            <p className="mt-2 text-sm text-zinc-600">
-              1950 — 2023
-            </p>
-
-          </div>
-
-          {/* MOVIES */}
-
-          <div className="border-b border-zinc-900 p-7 md:border-b-0 md:border-r">
-
-            <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">
-              Movies
-            </p>
-
-            <p className="mt-4 text-4xl font-semibold tracking-tight">
-              {totalMovies.toLocaleString()}
-            </p>
-
-            <p className="mt-2 text-sm text-zinc-600">
-              Across all years
-            </p>
-
-          </div>
-
-          {/* MOST ACTIVE */}
-
-          <div className="p-7">
-
-            <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">
-              Most Active Year
-            </p>
-
-            <p className="mt-4 text-4xl font-semibold tracking-tight">
-              {biggestYear?.year ?? "—"}
-            </p>
-
-            <p className="mt-2 text-sm text-zinc-600">
-              {Number(
-                biggestYear?.movie_count || 0
-              ).toLocaleString()}{" "}
-              movies released
-            </p>
-
-          </div>
-
+      {/* SUMMARY */}
+      <section className="years-stat-section">
+        <div className="years-section-intro">
+          <span>THE ARCHIVE AT A GLANCE</span>
+          <h2>Numbers behind the nostalgia.</h2>
         </div>
 
+        <div className="years-stat-grid">
+          <div className="years-stat-card">
+            <span className="years-stat-index">01 / THE TIMELINE</span>
+            <small>YEARS COVERED</small>
+            <strong>{years.length}</strong>
+            <p>1950 — 2023</p>
+            <div className="stat-decoration">◉</div>
+          </div>
+
+          <div className="years-stat-card years-stat-featured">
+            <span className="years-stat-index">02 / THE COLLECTION</span>
+            <small>MOVIES IN THE ARCHIVE</small>
+            <strong>{totalMovies.toLocaleString()}</strong>
+            <p>Across all recorded years</p>
+            <div className="stat-decoration">✳</div>
+          </div>
+
+          <div className="years-stat-card">
+            <span className="years-stat-index">03 / THE BUSIEST YEAR</span>
+            <small>MOST ACTIVE YEAR</small>
+            <strong>{biggestYear?.year ?? "—"}</strong>
+            <p>
+              {Number(biggestYear?.movie_count || 0).toLocaleString()} movies released
+            </p>
+            <div className="stat-decoration">✦</div>
+          </div>
+        </div>
       </section>
 
-      {/* ======================================================
-          COLLECTION TREND
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
-
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-
+      {/* COLLECTION CHART */}
+      <section className="years-data-section">
+        <div className="years-data-heading">
           <div>
-
-            <div className="flex items-center gap-3">
-
-              <span className="h-px w-6 bg-zinc-700" />
-
-              <p className="text-xs uppercase tracking-[0.3em] text-zinc-600">
-                Collection Trend
-              </p>
-
-            </div>
-
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Total Lifetime Collection
-            </h2>
-
-            <p className="mt-2 text-sm text-zinc-600">
-              Combined lifetime box office collection by release year
-            </p>
-
+            <span className="years-section-kicker">THE BOX OFFICE JOURNEY · 01</span>
+            <h2>The rise of the collection.</h2>
+            <p>Combined lifetime box office collection by release year.</p>
           </div>
 
-          <div className="text-left sm:text-right">
-
-            <p className="text-xs uppercase tracking-wider text-zinc-700">
-              All Years
-            </p>
-
-            <p className="mt-1 text-lg font-medium">
-              ₹{totalLifetime.toLocaleString()} Cr
-            </p>
-
+          <div className="years-total-display">
+            <small>ARCHIVE TOTAL</small>
+            <strong>₹{totalLifetime.toLocaleString("en-IN")} Cr</strong>
           </div>
-
         </div>
 
-        <div className="years-chart rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
+        <div className="years-chart-frame">
+          <div className="chart-frame-top">
+            <span>COLLECTION TIMELINE</span>
+            <span>UNIT · ₹ CRORES</span>
+          </div>
 
-          <div className="h-[380px] w-full sm:h-[450px]">
-
+          <div className="years-chart years-chart-gold">
             <ResponsiveContainer width="100%" height="100%">
-
               <LineChart
-                data={years}
-                margin={{
-                  top: 10,
-                  right: 10,
-                  left: 0,
-                  bottom: 5,
-                }}
+                data={sortedYears}
+                margin={{ top: 15, right: 15, left: 5, bottom: 5 }}
               >
-
                 <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="#2d2e34"
+                  strokeDasharray="3 5"
+                  stroke="#453128"
+                  vertical={false}
                 />
-
                 <XAxis
                   dataKey="year"
-                  stroke="#85847f"
-                  tick={{
-                    fill: "#85847f",
-                    fontSize: 11,
-                  }}
+                  stroke="#9a8061"
+                  tick={{ fill: "#b39a79", fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
+                  minTickGap={28}
                 />
-
                 <YAxis
-                  stroke="#85847f"
-                  tick={{
-                    fill: "#85847f",
-                    fontSize: 11,
-                  }}
+                  stroke="#9a8061"
+                  tick={{ fill: "#b39a79", fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
                 />
-
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#191a1f",
-                    border: "1px solid #2d2e34",
-                    borderRadius: "12px",
-                    color: "#f2eee5",
-                  }}
-                  labelStyle={{
-                    color: "#aaa397",
-                    marginBottom: "5px",
+                    backgroundColor: "#251413",
+                    border: "1px solid #99764b",
+                    borderRadius: "4px",
+                    color: "#f2e6d1",
                   }}
                   formatter={(value: any) => [
-                    `₹${Number(value || 0).toLocaleString()} Cr`,
+                    `₹${Number(value || 0).toLocaleString("en-IN")} Cr`,
                     "Collection",
                   ]}
+                  labelStyle={{ color: "#d7b477", marginBottom: "5px" }}
                 />
-
                 <Line
                   type="monotone"
                   dataKey="total_lifetime_cr"
-                  stroke="#c6a66a"
-                  strokeWidth={2}
+                  stroke="#d7b477"
+                  strokeWidth={2.5}
                   dot={false}
                   activeDot={{
-                    r: 4,
+                    r: 5,
+                    fill: "#a42f3b",
+                    stroke: "#f1d39d",
+                    strokeWidth: 2,
                   }}
                 />
-
               </LineChart>
-
             </ResponsiveContainer>
-
           </div>
 
+          <div className="chart-frame-bottom">
+            <span>1950</span>
+            <span>THE COLLECTION CHRONICLES</span>
+            <span>2023</span>
+          </div>
         </div>
-
       </section>
 
-      {/* ======================================================
-          MOVIES BY YEAR
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pb-20 sm:px-8">
-
-        <div className="mb-8">
-
-          <div className="flex items-center gap-3">
-
-            <span className="h-px w-6 bg-zinc-700" />
-
-            <p className="text-xs uppercase tracking-[0.3em] text-zinc-600">
-              Production
-            </p>
-
+      {/* MOVIE PRODUCTION CHART */}
+      <section className="years-data-section years-production-section">
+        <div className="years-data-heading">
+          <div>
+            <span className="years-section-kicker">THE CINEMA INDUSTRY · 02</span>
+            <h2>Years of production.</h2>
+            <p>Number of movies represented in the dataset for each year.</p>
           </div>
-
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-            Movies Released by Year
-          </h2>
-
-          <p className="mt-2 text-sm text-zinc-600">
-            Number of movies represented in the dataset for each year
-          </p>
-
+          <div className="years-total-display">
+            <small>MOVIES TRACKED</small>
+            <strong>{totalMovies.toLocaleString("en-IN")}</strong>
+          </div>
         </div>
 
-        <div className="years-chart rounded-2xl border border-zinc-900 bg-zinc-950 p-4 sm:p-6">
+        <div className="years-chart-frame">
+          <div className="chart-frame-top">
+            <span>ANNUAL FILM COUNT</span>
+            <span>UNIT · NUMBER OF MOVIES</span>
+          </div>
 
-          <div className="h-[380px] w-full sm:h-[450px]">
-
+          <div className="years-chart years-chart-red">
             <ResponsiveContainer width="100%" height="100%">
-
               <BarChart
-                data={years}
-                margin={{
-                  top: 10,
-                  right: 10,
-                  left: 0,
-                  bottom: 5,
-                }}
+                data={sortedYears}
+                margin={{ top: 15, right: 15, left: 5, bottom: 5 }}
               >
-
                 <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="#2d2e34"
+                  strokeDasharray="3 5"
+                  stroke="#453128"
+                  vertical={false}
                 />
-
                 <XAxis
                   dataKey="year"
-                  stroke="#85847f"
-                  tick={{
-                    fill: "#85847f",
-                    fontSize: 11,
-                  }}
+                  stroke="#9a8061"
+                  tick={{ fill: "#b39a79", fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
+                  minTickGap={28}
                 />
-
                 <YAxis
-                  stroke="#85847f"
-                  tick={{
-                    fill: "#85847f",
-                    fontSize: 11,
-                  }}
+                  stroke="#9a8061"
+                  tick={{ fill: "#b39a79", fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
                 />
-
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#191a1f",
-                    border: "1px solid #2d2e34",
-                    borderRadius: "12px",
-                    color: "#f2eee5",
-                  }}
-                  labelStyle={{
-                    color: "#aaa397",
-                    marginBottom: "5px",
+                    backgroundColor: "#251413",
+                    border: "1px solid #99764b",
+                    borderRadius: "4px",
+                    color: "#f2e6d1",
                   }}
                   formatter={(value: any) => [
-                    Number(value || 0).toLocaleString(),
+                    Number(value || 0).toLocaleString("en-IN"),
                     "Movies",
                   ]}
+                  labelStyle={{ color: "#d7b477", marginBottom: "5px" }}
                 />
-
                 <Bar
                   dataKey="movie_count"
-                  fill="#c6a66a"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={18}
+                  fill="#9d3941"
+                  radius={[3, 3, 0, 0]}
+                  maxBarSize={17}
                 />
-
               </BarChart>
-
             </ResponsiveContainer>
-
           </div>
 
+          <div className="chart-frame-bottom">
+            <span>1950</span>
+            <span>THE PRODUCTION CHRONICLES</span>
+            <span>2023</span>
+          </div>
         </div>
-
       </section>
 
-      {/* ======================================================
-          HIGHLIGHT
-      ====================================================== */}
-
+      {/* SPECIAL ARCHIVE FEATURE */}
       {highestCollectionYear && (
-
-        <section className="mx-auto max-w-7xl px-6 pb-20 sm:px-8">
-
-          <div className="rounded-2xl border border-zinc-900 bg-zinc-950 p-7 md:p-9">
-
-            <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
-
-              <div>
-
-                <p className="text-xs uppercase tracking-[0.25em] text-zinc-600">
-                  Highest Individual Lifetime Collection
-                </p>
-
-                <h2 className="mt-3 text-3xl font-semibold">
-                  {highestCollectionYear.year}
-                </h2>
-
-                <p className="mt-2 text-sm text-zinc-600">
-                  Highest-grossing movie of that release year
-                </p>
-
-              </div>
-
-              <div className="md:text-right">
-
-                <p className="text-4xl font-semibold tracking-tight">
-                  ₹
-                  {Number(
-                    highestCollectionYear.highest_lifetime_cr || 0
-                  ).toLocaleString()}
-                  <span className="ml-2 text-lg text-zinc-500">
-                    Cr
-                  </span>
-                </p>
-
-              </div>
-
+        <section className="years-feature-section">
+          <div className="years-feature-card">
+            <div className="years-feature-copy">
+              <span>THE ARCHIVE SPOTLIGHT</span>
+              <h2>A year to remember.</h2>
+              <p>
+                The highest individual lifetime collection recorded for a
+                movie released in this year.
+              </p>
             </div>
 
+            <div className="years-feature-result">
+              <small>FEATURED YEAR</small>
+              <strong>{highestCollectionYear.year}</strong>
+              <span>
+                ₹
+                {Number(
+                  highestCollectionYear.highest_lifetime_cr || 0
+                ).toLocaleString("en-IN")}{" "}
+                Cr
+              </span>
+              <small>HIGHEST INDIVIDUAL LIFETIME COLLECTION</small>
+            </div>
           </div>
-
         </section>
-
       )}
 
-      {/* ======================================================
-          YEARLY TABLE
-      ====================================================== */}
-
-      <section className="mx-auto max-w-7xl px-6 pb-20 sm:px-8">
-
-        <div className="mb-8">
-
-          <div className="flex items-center gap-3">
-
-            <span className="h-px w-6 bg-zinc-700" />
-
-            <p className="text-xs uppercase tracking-[0.3em] text-zinc-600">
-              Raw Data
-            </p>
-
+      {/* YEARLY ARCHIVE */}
+      <section className="years-archive-section">
+        <div className="years-data-heading">
+          <div>
+            <span className="years-section-kicker">THE COMPLETE RECORD · 03</span>
+            <h2>The yearly ledger.</h2>
+            <p>Browse the complete yearly box office record.</p>
           </div>
-
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-            Yearly Breakdown
-          </h2>
-
+          <span className="years-record-count">
+            {years.length} RECORDS
+          </span>
         </div>
 
-        <div className="years-table overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
-
-          {/* TABLE HEADER */}
-
-          <div className="hidden grid-cols-[120px_1fr_1fr_1fr] border-b border-zinc-900 bg-zinc-950 px-6 py-4 text-xs uppercase tracking-wider text-zinc-600 sm:grid">
-
-            <span>Year</span>
-
-            <span>Movies</span>
-
-            <span>Total Lifetime</span>
-
-            <span>Average Lifetime</span>
-
+        <div className="years-ledger">
+          <div className="years-ledger-header">
+            <span>YEAR</span>
+            <span>MOVIES</span>
+            <span>TOTAL COLLECTION</span>
+            <span>AVERAGE COLLECTION</span>
           </div>
 
-          {/* TABLE ROWS */}
+          {sortedYears.map((year, index) => (
+            <div className="years-ledger-row" key={year.year}>
+              <span className="ledger-year">
+                <small>{String(index + 1).padStart(2, "0")}</small>
+                <strong>{year.year}</strong>
+              </span>
 
-          {years.map((year) => (
+              <span className="ledger-number">
+                {Number(year.movie_count || 0).toLocaleString("en-IN")}
+              </span>
 
-            <div
-              key={year.year}
-              className="grid grid-cols-2 gap-y-5 border-b border-zinc-900 px-5 py-5 transition last:border-b-0 hover:bg-zinc-900/50 sm:grid-cols-[120px_1fr_1fr_1fr] sm:items-center sm:gap-0 sm:px-6"
-            >
+              <span className="ledger-collection">
+                ₹{Number(year.total_lifetime_cr || 0).toLocaleString("en-IN")} Cr
+              </span>
 
-              {/* YEAR */}
-
-              <div>
-
-                <p className="text-lg font-medium">
-                  {year.year}
-                </p>
-
-                <p className="mt-1 text-xs text-zinc-700 sm:hidden">
-                  Year
-                </p>
-
-              </div>
-
-              {/* MOVIES */}
-
-              <div className="text-right sm:text-left">
-
-                <p className="text-zinc-400">
-                  {Number(
-                    year.movie_count || 0
-                  ).toLocaleString()}
-                </p>
-
-                <p className="mt-1 text-xs text-zinc-700 sm:hidden">
-                  Movies
-                </p>
-
-              </div>
-
-              {/* TOTAL */}
-
-              <div>
-
-                <p>
-                  ₹
-                  {Number(
-                    year.total_lifetime_cr || 0
-                  ).toLocaleString()}{" "}
-                  Cr
-                </p>
-
-                <p className="mt-1 text-xs text-zinc-700 sm:hidden">
-                  Total Lifetime
-                </p>
-
-              </div>
-
-              {/* AVERAGE */}
-
-              <div className="text-right sm:text-left">
-
-                <p className="text-zinc-400">
-                  ₹
-                  {Number(
-                    year.avg_lifetime_cr || 0
-                  ).toLocaleString()}{" "}
-                  Cr
-                </p>
-
-                <p className="mt-1 text-xs text-zinc-700 sm:hidden">
-                  Average Lifetime
-                </p>
-
-              </div>
-
+              <span className="ledger-average">
+                ₹{Number(year.avg_lifetime_cr || 0).toLocaleString("en-IN")} Cr
+              </span>
             </div>
-
           ))}
-
         </div>
 
+        <div className="years-ledger-footer">
+          <span>BOX OFFICE ARCHIVES</span>
+          <span>FIGURES IN ₹ CRORES</span>
+          <span>1950 — 2023</span>
+        </div>
       </section>
 
-      {/* ======================================================
-          FOOTER
-      ====================================================== */}
-
-      <footer className="border-t border-zinc-900">
-
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-
-          <div>
-
-            <p className="text-sm font-medium tracking-wide">
-              BOX OFFICE
-            </p>
-
-            <p className="mt-1 text-xs text-zinc-700">
-              Indian cinema analytics
-            </p>
-
-          </div>
-
-          <p className="text-xs text-zinc-700">
-            Data through 2023
-          </p>
-
+      <footer className="years-footer">
+        <div>
+          <strong>BOX OFFICE</strong>
+          <span>THE CINEMA LEDGER</span>
         </div>
-
+        <p>EVERY ERA LEAVES A MARK ON THE BIG SCREEN.</p>
+        <span>END OF ARCHIVE · 2023</span>
       </footer>
-
     </main>
   );
 }
