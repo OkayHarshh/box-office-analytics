@@ -2,3 +2,4 @@ fastapi
 uvicorn
 databricks-sql-connector
 python-dotenv
+psycopg[binary,pool]>=3.2,<4
